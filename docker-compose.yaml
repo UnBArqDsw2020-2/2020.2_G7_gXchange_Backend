@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:11-alpine
+    container_name: db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+  web:
+    build: .
+    image: gxchange-api:v1
+    container_name: gxchange-api
+    depends_on:
+      - db
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+
+volumes:
+  dbdata:
