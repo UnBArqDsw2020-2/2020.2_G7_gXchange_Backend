@@ -34,9 +34,9 @@ class ZipCode(models.Model):
 
 class Offer(models.Model):
     class ConditionEnum(models.IntegerChoices):
-        NEW = 1, _('New')
-        SEMINEW = 2, _('Seminew')
-        USED = 3, _('Used')
+        NEW = 1, _("New")
+        SEMINEW = 2, _("Seminew")
+        USED = 3, _("Used")
 
     game_name = models.CharField(max_length=200)
     plataform = models.CharField(max_length=100)
@@ -48,16 +48,9 @@ class Offer(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     condition = models.IntegerField(choices=ConditionEnum.choices)
-    email = models.ForeignKey(
-        Person, 
-        on_delete=models.CASCADE
-    )
+    email = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
 class Picture(models.Model):
     bin = models.BinaryField()
-    id_offer = models.ForeignKey(
-        Offer, 
-        on_delete=models.CASCADE
-    )
-
+    id_offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
