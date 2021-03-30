@@ -20,4 +20,8 @@ jobs:
           DEFAULT_BRANCH: main
           VALIDATE_MARKDOWN: false
           VALIDATE_ALL_CODEBASE: false
+          VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_PYLINT: false
+          PYTHON_BLACK_CONFIG_FILE: pyproject.toml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
