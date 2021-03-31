@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils.translation import gettext as _
 
 
 class Person(AbstractBaseUser):
@@ -21,10 +22,10 @@ class Phone(models.Model):
 
 
 class User(models.Model):
-    email = models.ForeignKey(Person, on_delete=models.CASCADE)
-    ratings_amount = models.IntegerField(default=0)
-    sells_amount = models.IntegerField(default=0)
-    average = models.DecimalField(max_digits=3, decimal_places=2)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    ratings_amount = models.IntegerField(default=0, null=True)
+    sells_amount = models.IntegerField(default=0, null=True)
+    average = models.DecimalField(max_digits=3, decimal_places=2, null=True)
 
 
 class ZipCode(models.Model):
