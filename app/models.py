@@ -22,7 +22,7 @@ class Phone(models.Model):
 
 
 class User(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.OneToOneField(Person, primary_key=True, on_delete=models.CASCADE)
     ratings_amount = models.IntegerField(default=0, null=True)
     sells_amount = models.IntegerField(default=0, null=True)
     average = models.DecimalField(max_digits=3, decimal_places=2, null=True)
