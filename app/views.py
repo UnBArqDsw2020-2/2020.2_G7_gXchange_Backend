@@ -1,3 +1,9 @@
-# from django.shortcuts import render
+from app.models import Person
+from app.serializers import PersonSerializer
+from rest_framework import generics
 
-# Create your views here.
+
+class CreateUser(generics.CreateAPIView):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+    lookup_field = ["email"]
