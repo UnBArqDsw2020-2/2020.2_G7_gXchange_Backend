@@ -8,6 +8,7 @@ class CreateUser(generics.CreateAPIView):
     serializer_class = PersonSerializer
     lookup_field = "email"
 
+
 class UpdateUser(generics.RetrieveUpdateAPIView):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer

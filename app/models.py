@@ -17,8 +17,8 @@ class Person(AbstractBaseUser):
 
 
 class Phone(models.Model):
-    email = models.ForeignKey(Person, on_delete=models.CASCADE)
-    phone_number = models.IntegerField()
+    person = models.ForeignKey(Person, related_name="phones", on_delete=models.CASCADE)
+    phone_number = models.BigIntegerField()
 
 
 class User(models.Model):
