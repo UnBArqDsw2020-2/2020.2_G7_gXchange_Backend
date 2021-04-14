@@ -41,17 +41,17 @@ class Offer(models.Model):
 
     game_name = models.CharField(max_length=200)
     plataform = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    description = models.TextField()
+    price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    description = models.TextField(null=True)
     is_valid = models.BooleanField(default=True)
-    date = models.DateField()
+    is_trade = models.BooleanField(default=True)
     cep = models.CharField(max_length=50)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     condition = models.IntegerField(choices=ConditionEnum.choices)
-    email = models.ForeignKey(Person, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="offers", on_delete=models.CASCADE)
 
 
 class Picture(models.Model):
     bin = models.BinaryField()
-    id_offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, related_name="pictures", on_delete=models.CASCADE)
