@@ -1,6 +1,6 @@
 from app.utils import base64ToBinary
 from app.models import Person, Picture, Offer, User
-from app.serializers import PersonSerializer
+from app.serializers import OfferSerializer, PersonSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -12,6 +12,8 @@ class CreateUser(generics.CreateAPIView):
 
 
 class CreateOffer(generics.CreateAPIView):
+    serializer_class = OfferSerializer
+
     def post(self, request):
         data = request.data
 
@@ -25,6 +27,9 @@ class CreateOffer(generics.CreateAPIView):
         # user = User.objects.filter(person=person[0])
 
         pictures = data.pop("pictures")
+
+        # something that rhuan tell
+        user = User.objects.all()
 
         new_offer = Offer.objects.create(user=user[0], **data)
 

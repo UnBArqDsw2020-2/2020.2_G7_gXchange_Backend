@@ -28,7 +28,7 @@ class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = [
-            "offer_id",
+            "id",
             "game_name",
             "plataform",
             "price",

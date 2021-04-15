@@ -7,42 +7,46 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app', '0004_auto_20210402_0111'),
+        ("app", "0004_auto_20210402_0111"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='offer',
-            name='date',
+            model_name="offer",
+            name="date",
         ),
         migrations.RemoveField(
-            model_name='offer',
-            name='email',
+            model_name="offer",
+            name="email",
         ),
         migrations.RemoveField(
-            model_name='picture',
-            name='id_offer',
+            model_name="picture",
+            name="id_offer",
         ),
         migrations.AddField(
-            model_name='offer',
-            name='is_trade',
+            model_name="offer",
+            name="is_trade",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='offer',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='offers', to='app.user'),
+            model_name="offer",
+            name="user",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, related_name="offers", to="app.user"
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='picture',
-            name='offer',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='pictures', to='app.offer'),
+            model_name="picture",
+            name="offer",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, related_name="pictures", to="app.offer"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='offer',
-            name='price',
+            model_name="offer",
+            name="price",
             field=models.DecimalField(decimal_places=2, max_digits=5, null=True),
         ),
     ]
