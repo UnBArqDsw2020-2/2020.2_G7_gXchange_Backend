@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.core.validators import validate_unicode_slug
 from django.utils.translation import gettext as _
 
 
 class Person(AbstractBaseUser):
     name = models.CharField(max_length=256)
     email = models.EmailField(max_length=256, primary_key=True)
-    nickname = models.CharField(max_length=256, unique=True)
+    nickname = models.CharField(max_length=256, unique=True, validators=[validate_unicode_slug])
     picture = models.BinaryField()
     USERNAME_FIELD = "nickname"
     REQUIRED_FIELDS = [
@@ -17,8 +18,8 @@ class Person(AbstractBaseUser):
 
 
 class Phone(models.Model):
-    email = models.ForeignKey(Person, on_delete=models.CASCADE)
-    phone_number = models.IntegerField()
+    person = models.ForeignKey(Person, related_name="phones", on_delete=models.CASCADE)
+    phone_number = models.BigIntegerField()
 
 
 class User(models.Model):

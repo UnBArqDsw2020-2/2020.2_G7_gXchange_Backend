@@ -8,7 +8,13 @@ from rest_framework.response import Response
 class CreateUser(generics.CreateAPIView):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
-    lookup_field = ["email"]
+    lookup_field = "email"
+
+
+class UpdateUser(generics.RetrieveUpdateAPIView):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+    lookup_field = "nickname"
 
 
 class CreateOffer(generics.CreateAPIView):
