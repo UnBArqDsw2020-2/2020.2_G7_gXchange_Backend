@@ -17,8 +17,10 @@ class UpdateUser(generics.RetrieveUpdateAPIView):
     lookup_field = "nickname"
 
 
-class CreateOffer(generics.CreateAPIView):
+class ListCreateOffer(generics.ListCreateAPIView):
+    queryset = Offer.objects.all()
     serializer_class = OfferSerializer
+    lookup_field = "id"
 
     def post(self, request):
         data = request.data
@@ -26,16 +28,16 @@ class CreateOffer(generics.CreateAPIView):
         # the back-end must find the logged user
         # leting this comment to make it easy for testing
 
-        # email = data.pop("user")
+        email = data.pop("user")
 
-        # person = Person.objects.filter(email=email)
+        person = Person.objects.filter(email=email)
 
-        # user = User.objects.filter(person=person[0])
+        user = User.objects.filter(person=person[0])
 
         pictures = data.pop("pictures")
 
         # something that rhuan tell
-        user = User.objects.all()
+        #user = User.objects.all()
 
         new_offer = Offer.objects.create(user=user[0], **data)
 
@@ -45,3 +47,4 @@ class CreateOffer(generics.CreateAPIView):
             Picture.objects.create(offer=new_offer, bin=binary_photo)
 
         return Response(status=201)
+
