@@ -37,7 +37,7 @@ class ListCreateOffer(generics.ListCreateAPIView):
         pictures = data.pop("pictures")
 
         # something that rhuan tell
-        #user = User.objects.all()
+        # user = User.objects.all()
 
         new_offer = Offer.objects.create(user=user[0], **data)
 
@@ -47,4 +47,3 @@ class ListCreateOffer(generics.ListCreateAPIView):
             Picture.objects.create(offer=new_offer, bin=binary_photo)
 
         return Response(status=201)
-

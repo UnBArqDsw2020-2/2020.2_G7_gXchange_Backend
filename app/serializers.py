@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.serializers import CharField
 from app.models import Person, User, Offer, Picture, Phone
 
 
@@ -35,6 +34,16 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ["name", "email", "nickname", "password", "picture", "phones"]
 
 
+class UserResumeField(serializers.RelatedField):
+    def to_representation(self, value):
+        return {
+            "name": value.person.name,
+            "ratings_amount": value.ratings_amount,
+            "sells_amount": value.sells_amount,
+            "average": value.average,
+        }
+
+
 class PictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Picture
@@ -43,14 +52,14 @@ class PictureSerializer(serializers.ModelSerializer):
 
 class OfferSerializer(serializers.ModelSerializer):
     pictures = PictureSerializer(many=True, required=False)
-    user = CharField()
+    user = UserResumeField(read_only=True)
 
     class Meta:
         model = Offer
         fields = [
             "id",
             "game_name",
-            "plataform",
+            "platform",
             "price",
             "description",
             "is_trade",
