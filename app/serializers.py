@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from app.models import Person, User, Phone
+from rest_framework.serializers import CharField
+from app.models import Person, User, Offer, Picture, Phone
 
 
 class PhoneSerializer(serializers.ModelSerializer):
@@ -32,3 +33,29 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ["name", "email", "nickname", "password", "picture", "phones"]
+
+
+class PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Picture
+        fields = ["bin"]
+
+
+class OfferSerializer(serializers.ModelSerializer):
+    pictures = PictureSerializer(many=True, required=False)
+    user = CharField()
+
+    class Meta:
+        model = Offer
+        fields = [
+            "id",
+            "game_name",
+            "plataform",
+            "price",
+            "description",
+            "is_trade",
+            "cep",
+            "condition",
+            "user",
+            "pictures",
+        ]
