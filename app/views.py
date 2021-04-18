@@ -46,6 +46,7 @@ class CreateOffer(generics.CreateAPIView):
 
         return Response(status=201)
 
+
 class UpdateOffer(generics.RetrieveUpdateAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
@@ -55,19 +56,18 @@ class UpdateOffer(generics.RetrieveUpdateAPIView):
         data = request.data
 
         pictures = data.pop("pictures")
-        
+
         offer = Offer.objects.get(id=kwargs["id"])
 
         Picture.objects.filter(offer_id=kwargs["id"]).delete()
 
         for d in data:
             offer.__dict__[d] = data[d]
-        
+
         for picture in pictures:
             binary_photo = base64ToBinary(picture["bin"])
             Picture.objects.create(offer=offer, bin=binary_photo)
-        
+
         offer.save()
 
         return Response(status=201)
-    
