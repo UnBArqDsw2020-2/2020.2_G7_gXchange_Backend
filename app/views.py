@@ -3,9 +3,12 @@ from app.models import Person, Picture, Offer, User
 from app.serializers import OfferSerializer, PersonSerializer
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework import permissions
 
 
 class CreateUser(generics.CreateAPIView):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
     lookup_field = "email"
