@@ -14,8 +14,9 @@ class PersonSerializer(serializers.ModelSerializer):
     phones = PhoneSerializer(many=True)
 
     def create(self, validated_data):
-        password = validated_data["password"]
-        validated_data["password"] = make_password(password)
+        validated_data["password"] = make_password(
+            validated_data["password"],
+        )
         phone_num = validated_data.pop("phones")
         phone_num = phone_num[0]["phone_number"]
         person_new = Person.objects.create(**validated_data)

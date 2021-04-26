@@ -38,7 +38,7 @@ class CreateOffer(generics.CreateAPIView):
 
             Picture.objects.create(offer=new_offer, bin=binary_photo)
 
-        return Response(status=401)
+        return Response(status=201)
 
 
 class UpdateOffer(generics.RetrieveUpdateAPIView):
