@@ -1,11 +1,15 @@
 from app.utils import base64ToBinary
-from app.models import Person, Picture, Offer, User
+from app.models import Person, Picture, Offer
 from app.serializers import OfferSerializer, PersonSerializer
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework import permissions
+from app.utils import get_logged_user
 
 
 class CreateUser(generics.CreateAPIView):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
     lookup_field = "email"
@@ -23,21 +27,11 @@ class CreateOffer(generics.CreateAPIView):
     def post(self, request):
         data = request.data
 
-        # the back-end must find the logged user
-        # leting this comment to make it easy for testing
-
-        email = data.pop("user")
-
-        person = Person.objects.filter(email=email)
-
-        user = User.objects.filter(person=person[0])
-
         pictures = data.pop("pictures")
 
-        # something that rhuan tell
-        # user = User.objects.all()
+        user = get_logged_user(request)
 
-        new_offer = Offer.objects.create(user=user[0], **data)
+        new_offer = Offer.objects.create(user=user, **data)
 
         for picture in pictures:
             binary_photo = base64ToBinary(picture["bin"])

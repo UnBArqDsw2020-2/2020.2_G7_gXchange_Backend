@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import CharField
 from app.models import Person, User, Offer, Picture, Phone
+from django.contrib.auth.hashers import make_password
 
 
 class PhoneSerializer(serializers.ModelSerializer):
@@ -13,6 +14,9 @@ class PersonSerializer(serializers.ModelSerializer):
     phones = PhoneSerializer(many=True)
 
     def create(self, validated_data):
+        validated_data["password"] = make_password(
+            validated_data["password"],
+        )
         phone_num = validated_data.pop("phones")
         phone_num = phone_num[0]["phone_number"]
         person_new = Person.objects.create(**validated_data)
