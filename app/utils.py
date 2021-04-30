@@ -17,27 +17,24 @@ def binaryToBase64(binary_data):
     return base64_bytes.decode("ascii")
 
 
-def get_logged_user_email(request):
-    token = get_authorization_header(request).decode("utf-8").replace("Bearer ", "")
+def decode_token(auth_header):
+    token = auth_header.decode("utf-8").replace("Bearer ", "")
 
     if token is None or token == "null" or token.strip() == "":
         return None
 
-    decoded = jwt.decode(token, settings.SECRET_KEY, algorithms="HS256")
+    return jwt.decode(token, settings.SECRET_KEY, algorithms="HS256")
 
-    return decoded["user_id"]
+
+def get_logged_user_email(request):
+    decoded_token = decode_token(get_authorization_header(request))
+
+    return decoded_token["user_id"]
 
 
 def get_logged_user(request):
-    token = get_authorization_header(request).decode("utf-8").replace("Bearer ", "")
+    decoded_token = decode_token(get_authorization_header(request))
 
-    if token is None or token == "null" or token.strip() == "":
-        return None
-
-    decoded = jwt.decode(token, settings.SECRET_KEY, algorithms="HS256")
-
-    user_email = decoded["user_id"]
-
-    person = Person.objects.get(email=user_email)
+    person = Person.objects.get(email=decoded_token["user_id"])
 
     return User.objects.get(person=person)
