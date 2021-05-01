@@ -42,7 +42,7 @@ class Offer(models.Model):
         USED = 3, _("Used")
 
     game_name = models.CharField(max_length=200)
-    plataform = models.CharField(max_length=100)
+    platform = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     description = models.TextField(null=True)
     is_valid = models.BooleanField(default=True)

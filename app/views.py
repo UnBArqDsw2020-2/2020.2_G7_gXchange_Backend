@@ -21,8 +21,10 @@ class UpdateUser(generics.RetrieveUpdateAPIView):
     lookup_field = "nickname"
 
 
-class CreateOffer(generics.CreateAPIView):
+class ListCreateOffer(generics.ListCreateAPIView):
+    queryset = Offer.objects.all()
     serializer_class = OfferSerializer
+    lookup_field = "id"
 
     def post(self, request):
         data = request.data
