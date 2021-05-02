@@ -36,6 +36,15 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ["name", "email", "nickname", "password", "picture", "phones"]
+        extra_kwargs = {"password": {"write_only": True}}
+
+
+class UserSerializer(serializers.ModelSerializer):
+    person = PersonSerializer()
+
+    class Meta:
+        model = User
+        fields = ["ratings_amount", "sells_amount", "average", "person"]
 
 
 class UserResumeField(serializers.RelatedField):
