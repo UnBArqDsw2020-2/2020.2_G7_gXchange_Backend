@@ -14,6 +14,7 @@ from pathlib import Path
 from django.conf import settings
 import os
 import dj_database_url
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,6 +97,7 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "USER_ID_FIELD": "email",
     "SIGNING_KEY": settings.SECRET_KEY,
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
 }
 
 WSGI_APPLICATION = "api.wsgi.application"

@@ -1,6 +1,7 @@
 from app.utils import base64ToBinary
 from app.models import Person, Picture, Offer
-from app.serializers import OfferSerializer, PersonSerializer
+from rest_framework.views import APIView
+from app.serializers import OfferSerializer, PersonSerializer, UserSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -43,7 +44,7 @@ class ListCreateOffer(generics.ListCreateAPIView):
         return Response(status=201)
 
 
-class UpdateOffer(generics.RetrieveUpdateAPIView):
+class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     lookup_field = "id"
@@ -67,3 +68,24 @@ class UpdateOffer(generics.RetrieveUpdateAPIView):
         offer.save()
 
         return Response(status=201)
+      
+class getOffers(generics.ListAPIView):
+    queryset = Offer.objects.all()
+    serializer_class = OfferSerializer
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return Offer.objects.filter(pk=self.kwargs["id"])
+
+class PingView(APIView):
+    def post(self, request):
+        user = get_logged_user(request)
+
+        if user:
+            serializer = UserSerializer(user)
+
+            return Response(status=200, data=serializer.data)
+
+        return Response(status=401)
+ 
+
