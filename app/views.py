@@ -68,6 +68,7 @@ class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
 
         return Response(status=201)
 
+
 class getOffers(generics.ListAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
