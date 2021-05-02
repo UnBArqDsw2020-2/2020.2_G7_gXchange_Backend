@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ["gxchange-api-dev.herokuapp.com", "gxchange-api.herokuapp.com"]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "https://gxchange-dev.netlify.app/",
+    "https://gxchange.netlify.app/",
 ]
 
 # Application definition
