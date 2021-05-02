@@ -44,7 +44,7 @@ class ListCreateOffer(generics.ListCreateAPIView):
         return Response(status=201)
 
 
-class UpdateOffer(generics.RetrieveUpdateAPIView):
+class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     lookup_field = "id"
@@ -68,7 +68,14 @@ class UpdateOffer(generics.RetrieveUpdateAPIView):
         offer.save()
 
         return Response(status=201)
+      
+class getOffers(generics.ListAPIView):
+    queryset = Offer.objects.all()
+    serializer_class = OfferSerializer
+    lookup_field = "id"
 
+    def get_queryset(self):
+        return Offer.objects.filter(pk=self.kwargs["id"])
 
 class PingView(APIView):
     def post(self, request):
@@ -80,3 +87,5 @@ class PingView(APIView):
             return Response(status=200, data=serializer.data)
 
         return Response(status=401)
+ 
+
