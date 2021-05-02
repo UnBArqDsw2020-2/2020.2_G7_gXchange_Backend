@@ -8,4 +8,6 @@ COPY . /code/
 RUN sed -i 's/\r//' start.sh
 RUN chmod +x start.sh
 
+EXPOSE $PORT:8000
+
 ENTRYPOINT [ "./start.sh" ]
