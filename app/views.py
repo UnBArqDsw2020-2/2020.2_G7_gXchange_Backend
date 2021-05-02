@@ -8,12 +8,22 @@ from rest_framework import permissions
 from app.utils import get_logged_user
 
 
-class CreateUser(generics.CreateAPIView):
+class CreateUser(APIView):
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-    lookup_field = "email"
+
+    def post(self, request):
+        data = request.data
+
+        picture = base64ToBinary(data.pop("picture"))
+
+        serializer = PersonSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=201)
+
+        return Response(status=400)
 
 
 class UpdateUser(generics.RetrieveUpdateAPIView):
@@ -68,7 +78,8 @@ class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
         offer.save()
 
         return Response(status=201)
-      
+
+
 class getOffers(generics.ListAPIView):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
@@ -76,6 +87,7 @@ class getOffers(generics.ListAPIView):
 
     def get_queryset(self):
         return Offer.objects.filter(pk=self.kwargs["id"])
+
 
 class PingView(APIView):
     def post(self, request):
@@ -87,5 +99,3 @@ class PingView(APIView):
             return Response(status=200, data=serializer.data)
 
         return Response(status=401)
- 
-
