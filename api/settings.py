@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from django.conf import settings
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)#v4eqsw*$17m@!3w"
+SECRET_KEY = os.environ.get("SECRET_KEY") or "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)#v4eqsw*$17m@!3w"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -110,6 +112,10 @@ DATABASES = {
         "PORT": 5432,
     }
 }
+
+
+if os.environ.get("DEPLOY") is not None:
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
