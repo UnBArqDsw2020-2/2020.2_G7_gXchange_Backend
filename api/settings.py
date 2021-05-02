@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY") or "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["gxchange-api-dev.herokuapp.com", "gxchange-api.herokuapp.com"]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
