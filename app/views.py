@@ -1,5 +1,6 @@
-from app.utils import base64ToBinary
-from app.models import Person, Picture, Offer
+from app.utils import base64ToBinary, binaryToBase64
+from app.models import Person, Picture, Offer, User, Phone
+from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from app.serializers import OfferSerializer, PersonSerializer, UserSerializer
 from rest_framework import generics
@@ -13,17 +14,23 @@ class CreateUser(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        data = request.data
+        try:
+            data = request.data
 
-        picture = base64ToBinary(data.pop("picture"))
+            data["picture"] = base64ToBinary(data["picture"])
+            data["password"] = make_password(
+                data["password"],
+            )
+            phone_num = data.pop("phones")
+            phone_num = phone_num[0]["phone_number"]
 
-        serializer = PersonSerializer(data=data)
+            person_new = Person.objects.create(**data)
+            User.objects.create(person=person_new)
+            Phone.objects.create(person=person_new, phone_number=phone_num)
 
-        if serializer.is_valid():
-            serializer.save()
             return Response(status=201)
-
-        return Response(status=400)
+        except:
+            return Response(status=422)
 
 
 class UpdateUser(generics.RetrieveUpdateAPIView):
@@ -86,7 +93,8 @@ class getOffers(generics.ListAPIView):
     lookup_field = "id"
 
     def get_queryset(self):
-        return Offer.objects.filter(pk=self.kwargs["id"])
+        user = get_logged_user(request)
+        return Offer.objects.filter(user=user)
 
 
 class PingView(APIView):
@@ -95,6 +103,10 @@ class PingView(APIView):
 
         if user:
             serializer = UserSerializer(user)
+
+            person = Person.objects.get(email=serializer.data["person"]["email"])
+
+            serializer.data["picture"] = binaryToBase64(person.picture)
 
             return Response(status=200, data=serializer.data)
 
