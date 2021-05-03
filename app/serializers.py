@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from app.models import Person, User, Offer, Picture, Phone
+from app.utils import binaryToBase64
 
 
 class PhoneSerializer(serializers.ModelSerializer):
@@ -36,11 +37,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserResumeField(serializers.RelatedField):
     def to_representation(self, value):
+        phone_num = Phone.objects.filter(person=value.person)[0].phone_number
+
         return {
+            "phone": phone_num,
+            "average": value.average,
             "name": value.person.name,
             "ratings_amount": value.ratings_amount,
             "sells_amount": value.sells_amount,
-            "average": value.average,
+            "picture": binaryToBase64(value.person.picture),
         }
 
 
