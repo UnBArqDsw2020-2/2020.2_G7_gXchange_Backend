@@ -19,6 +19,9 @@ jobs:
           LINTER_RULES_PATH: /
           DEFAULT_BRANCH: main
           VALIDATE_MARKDOWN: false
+          VALIDATE_DOCKERFILE: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
+          VALIDATE_BASH: false
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_PYTHON_MYPY: false

@@ -14,9 +14,10 @@ services:
     build: .
     image: gxchange-api:v1
     container_name: gxchange-api
+    environment: 
+      - PORT=8000
     depends_on:
       - db
-    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:

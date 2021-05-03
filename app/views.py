@@ -97,6 +97,7 @@ class getOffers(generics.ListAPIView):
         return Offer.objects.filter(user=user)
 
 
+
 class PingView(APIView):
     def post(self, request):
         user = get_logged_user(request)
