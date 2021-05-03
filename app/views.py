@@ -1,5 +1,6 @@
-from app.utils import base64ToBinary
-from app.models import Person, Picture, Offer
+from app.utils import base64ToBinary, binaryToBase64
+from app.models import Person, Picture, Offer, User, Phone
+from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from app.serializers import OfferSerializer, PersonSerializer, UserSerializer
 from rest_framework import generics
@@ -8,12 +9,28 @@ from rest_framework import permissions
 from app.utils import get_logged_user
 
 
-class CreateUser(generics.CreateAPIView):
+class CreateUser(APIView):
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-    lookup_field = "email"
+
+    def post(self, request):
+        try:
+            data = request.data
+
+            data["picture"] = base64ToBinary(data["picture"])
+            data["password"] = make_password(
+                data["password"],
+            )
+            phone_num = data.pop("phones")
+            phone_num = phone_num[0]["phone_number"]
+
+            person_new = Person.objects.create(**data)
+            User.objects.create(person=person_new)
+            Phone.objects.create(person=person_new, phone_number=phone_num)
+
+            return Response(status=201)
+        except Exception:
+            return Response(status=422)
 
 
 class UpdateUser(generics.RetrieveUpdateAPIView):
@@ -70,13 +87,18 @@ class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=201)
 
 
-class getOffers(generics.ListAPIView):
-    queryset = Offer.objects.all()
-    serializer_class = OfferSerializer
-    lookup_field = "id"
+class getOffers(APIView):
+    def get(self, request):
+        user = get_logged_user(request)
 
-    def get_queryset(self):
-        return Offer.objects.filter(pk=self.kwargs["id"])
+        if user:
+            offers = Offer.objects.filter(user=user)
+
+            serializer = OfferSerializer(offers, many=True)
+
+            return Response(status=200, data=serializer.data)
+
+        return Response(status=401)
 
 
 class PingView(APIView):
@@ -85,6 +107,10 @@ class PingView(APIView):
 
         if user:
             serializer = UserSerializer(user)
+
+            person = Person.objects.get(email=serializer.data["person"]["email"])
+
+            serializer.data["picture"] = binaryToBase64(person.picture)
 
             return Response(status=200, data=serializer.data)
 
