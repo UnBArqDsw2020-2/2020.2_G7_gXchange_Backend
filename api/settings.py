@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from django.conf import settings
+import os
+import dj_database_url
 import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,16 +25,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)#v4eqsw*$17m@!3w"
+SECRET_KEY = os.environ.get("SECRET_KEY") or "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)#v4eqsw*$17m@!3w"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG") or True
 CORS_ORIGIN_ALLOW_ALL = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["gxchange-api-dev.herokuapp.com", "gxchange-api.herokuapp.com"]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "https://gxchange-dev.netlify.app",
+    "https://gxchange.netlify.app",
 ]
 
 # Application definition
@@ -112,6 +116,10 @@ DATABASES = {
         "PORT": 5432,
     }
 }
+
+
+if os.environ.get("DEPLOY") is not None:
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
