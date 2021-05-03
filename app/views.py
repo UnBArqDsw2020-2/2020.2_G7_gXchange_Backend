@@ -29,7 +29,7 @@ class CreateUser(APIView):
             Phone.objects.create(person=person_new, phone_number=phone_num)
 
             return Response(status=201)
-        except:
+        except Exception:
             return Response(status=422)
 
 
@@ -87,15 +87,18 @@ class UpdateOffer(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=201)
 
 
-class getOffers(generics.ListAPIView):
-    queryset = Offer.objects.all()
-    serializer_class = OfferSerializer
-    lookup_field = "id"
-
-    def get_queryset(self):
+class getOffers(APIView):
+    def get(self, request):
         user = get_logged_user(request)
-        return Offer.objects.filter(user=user)
 
+        if user:
+            offers = Offer.objects.filter(user=user)
+
+            serializer = OfferSerializer(offers, many=True)
+
+            return Response(status=200, data=serializer.data)
+
+        return Response(status=401)
 
 
 class PingView(APIView):

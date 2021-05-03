@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from app.models import Person, User, Offer, Picture, Phone
-from django.contrib.auth.hashers import make_password
 
 
 class PhoneSerializer(serializers.ModelSerializer):
