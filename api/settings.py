@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY") or "wnkd^*xm+8g7bq5z1ih--&f*xb^nngc8y)#v4eqsw*$17m@!3w"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") or True
+DEBUG = False if os.environ.get("DEBUG") == "false" else True
 CORS_ORIGIN_ALLOW_ALL = False
 
 ALLOWED_HOSTS = ["localhost", "gxchange-api-dev.herokuapp.com", "gxchange-api.herokuapp.com"]
